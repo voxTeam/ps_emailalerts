@@ -230,11 +230,13 @@ class Ps_EmailAlerts extends Module
                 $emails = explode(self::__MA_MAIL_DELIMITOR__, $emails);
                 foreach ($emails as $k => $email) {
                     $email = trim($email);
-                    if (!empty($email) && !Validate::isEmail($email)) {
-                        $errors[] = $this->trans('Invalid e-mail:', array(), 'Modules.Mailalerts.Admin').' '.Tools::safeOutput($email);
-                        break;
-                    } elseif (!empty($email)) {
-                        $emails[$k] = $email;
+                    if (!empty($email)) {
+                        if (Validate::isEmail($email)) {
+                            $emails[$k] = $email;
+                        } else {
+                            $errors[] = $this->trans('Invalid e-mail:', array(), 'Modules.Mailalerts.Admin').' '.Tools::safeOutput($email);
+                            break;
+                        }
                     } else {
                         unset($emails[$k]);
                     }
